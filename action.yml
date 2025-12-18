@@ -1,6 +1,5 @@
 name: hack_js
-
-description: vulnerability scans on dependencies for javascript projects
+description: Vulnerability scans on dependencies for JavaScript projects
 
 inputs:
   node_version:
@@ -11,10 +10,8 @@ inputs:
     description: 'GitHub token for authentication'
     required: true
 
-
 runs:
   using: composite
-
   steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -26,13 +23,16 @@ runs:
 
     - name: Install dependencies
       run: npm install
+      shell: bash
 
     - name: Run vulnerability scan
       id: audit
       run: npm audit --audit-level=moderate || echo "audit_failed=true" >> $GITHUB_ENV
+      shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
 
     - name: Enforce dependency check
       if: env.audit_failed == 'true'
       run: exit 1
+      shell: bash
