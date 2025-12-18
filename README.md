@@ -29,9 +29,11 @@ jobs:
   audit:
     runs-on: ubuntu-latest
     steps:
-      - uses: PocAccount2/hack_js@v2
+      - uses: PocAccount2/hack_js@v4
         with:
           node_version: '18'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
 ```
 

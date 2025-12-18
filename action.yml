@@ -10,6 +10,11 @@ inputs:
     description: 'GitHub token for authentication'
     required: true
 
+  SLACK_WEBHOOK_URL:
+    description: 'Slack webhook URL'
+    required: true
+  
+
 runs:
   using: composite
   steps:
@@ -32,7 +37,18 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
 
+    - name: Send Slack notification
+      if: ${{ env.audit_failed == 'true' }}
+      uses: slackapi/slack-github-action@v2.1.1
+      with:
+        webhook: ${{ inputs.SLACK_WEBHOOK_URL }}
+        webhook-type: incoming-webhook
+        payload: |
+          {
+            "text": "warning: NPM Audit detected vulnerabilities in repo *${{ github.repository }}* on branch *${{ github.ref_name }}*.\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run>"
+          }
+
     - name: Enforce dependency check
-      if: env.audit_failed == 'true'
+      if: ${{ env.audit_failed == 'true' }}
       run: exit 1
       shell: bash
