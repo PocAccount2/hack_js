@@ -29,7 +29,7 @@ jobs:
   audit:
     runs-on: ubuntu-latest
     steps:
-      - uses: your-username/hack_js@v1
+      - uses: PocAccount2/hack_js@v1
         with:
           node_version: '18'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
